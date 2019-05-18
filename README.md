@@ -87,7 +87,7 @@ Every time you need to install a new node package you should:
 
 - Install it also in teh container, issuing:
 
-`docker exec -it docker exec -it nsvue npm install`
+`docker exec -it nsvue npm install`
 
 # Security
 
