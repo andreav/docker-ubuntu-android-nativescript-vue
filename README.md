@@ -46,6 +46,8 @@ docker run --name nsvue \
            -v /usr/src/app/node_modules \
            img-and-ubu-ns-vue
 
+docker exec -it nsvue npm install
+
 alias tns='docker exec -it nsvue tns'
 tns build android --bundle
 tns run android --bundle
@@ -54,7 +56,9 @@ tns run android --bundle
 With these command you are:
 
 - Getting Dockerfile and .dockerignore files into your project
-- Building ubuntu-android-nativescript image
+  You need to build dockerfile locally for creating the right use inside the container
+
+- Downloading andreav/ubuntu-android-nativescript image
   - ubuntu 18.04 is the base
   - java 8 openjdj is installed
   - android-28 SDK is installed
@@ -62,14 +66,14 @@ With these command you are:
 
 - Building ubuntu-android-nativescript-vue on top of the previous one
   - a user with the same uid:gid from the host is created in the container
-  - package.json is copied 
-  - npm install downloads all packaged (included nativescript-vue)
 
 - Run a container named 'nsvue' as the build environment:
   - running with same uid:gid as host user. So, generated files inside the container (i.e. "target" folder containing apk) will appear on the host as created by the host user
   - mounting source code
   - using --privileged and mount /dev/bus/usb for installing apk on the device
   - mounting node_modules as container volume to avoid overwriting host node_modules
+
+- npm install packages
 
 - Creating an alias for using tns as if it was installed on the host machine
 
@@ -87,7 +91,7 @@ Every time you need to install a new node package you should:
 
 - Install it also in teh container, issuing:
 
-`docker exec -it docker exec -it nsvue npm install`
+`docker exec -it nsvue npm install`
 
 # Security
 
@@ -108,45 +112,6 @@ In this way host and container user differences are harmonized and files generat
 This flag is mandatory for mounting /dev/bus/usb
 However user inside container is NOT ROOT (unless you build this image as root) so kernel will grant to the container user the same rights your host user will have.
 
-# Dockerfile
-
-It uses multistage Dockerfile.
-So it's:
-- All in 1 file, nice
-- Stage 0 is a plain ubuntu / android / nativescript image, so anyone can reuse it as it is, or s a base for installing another supported framework (for instance angular)
-You can build this base image by:
-
-    `docker build --target ubuntunativescript . -t ubu-ns`
-
-- Stage 1 adds nativescript-vue and source code
-This stage can be built as the target Dockerfile image like this:
-
-    `docker build . -t ubu-ns-vue`
-
-
-# Useful Commands
-
-- `docker build --target ubuntunativescript . -t img-ubu-ns`
-As mentioned before, this command lets you build a pure nativescript image (the first stage of the docker file)
-
-- `docker run -it --rm img-ubu-ns`
-Once built the pure nativescript image, you can run it. Some diag messages will be presented on stdout, thanks to @kristophjunge for the shell script.
-
-- `docker build --target ubuntunativescript . -t img-ubu-ns-vue`
-This command lets you build a nativescript-vue image, and copies the source code into the container. 
-With the next command you can the log into the container and play with nativescirpt-vue
-
-- `docker run -it --rm -v /dev/bus/usb:/dev/bus/usb img-ubu-ns-vue bash`
-Issue this command to work directly inside a nativescript-vue environment inside your container
-Source code is inside /usr/src/app
-For instance you can build and manually run your app:
-  - tns build android --bundle
-  - tns run android --bundle
-
 # References
-
-- https://github.com/kristophjunge/docker-nativescript
-
-- https://docs.nativescript.org/start/ns-setup-linux
 
 - https://dev.to/alex_barashkov/using-docker-for-nodejs-in-development-and-production-3cgp
