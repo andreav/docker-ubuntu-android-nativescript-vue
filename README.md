@@ -7,6 +7,8 @@ Here the goal is:
 - Developing on my host (with my preferred IDE and so on)
 - Building and running application inside my docker container but as I had everything installed on my host
 
+This image is based on [andreav/docker-ubuntu-android-nativescript](https://github.com/andreav/docker-ubuntu-android-nativescript) Dockerfile
+
 # Setup environment
 
 ## Setup host and scaffold the project
@@ -21,7 +23,6 @@ npm install
 ```
 
 Now you host is ready, you have a nativescript-vue project and you can start developing
-
 
 ## Run the app inside the container
 
