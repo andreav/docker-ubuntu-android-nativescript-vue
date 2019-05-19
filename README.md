@@ -61,9 +61,9 @@ You need to build dockerfile locally for creating the right user inside the cont
 
 - Downloading andreav/ubuntu-android-nativescript image
   - ubuntu 18.04 is the base
-  - java 8 openjdj is installed
-  - android-28 SDK is installed
-  - nativescript is installed 
+  - java 8 openjdj
+  - android-28 SDK
+  - nativescript 5.4.0
 
 - Building ubuntu-android-nativescript-vue on top of the previous one
   - a user with the same uid:gid from the host is created in the container
