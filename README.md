@@ -26,7 +26,7 @@ Now you host is ready, you have a nativescript-vue project and you can start dev
 ## Run the app inside the container
 
 Building and running your app was the hard setup part.
-But now you can simply issue this commands:
+But now you can simply issue this commands (from the root of the project):
 
 ```
 curl -LJ \
@@ -42,7 +42,7 @@ docker run --name nsvue \
            -it -d --privileged \
            -u $( id -u):$(id -g) \
            -v /dev/bus/usb:/dev/bus/usb \
-           -v ${PWD}/app:/usr/src/app \
+           -v ${PWD}:/usr/src/app \
            -v /usr/src/app/node_modules \
            img-and-ubu-ns-vue
 

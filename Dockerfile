@@ -1,4 +1,4 @@
-FROM andreav/docker-ubuntu-android-nativescript
+FROM andreav/docker-ubuntu-android-nativescript:latest
 MAINTAINER Andrea V <andreav.pub@gmail.com>
 
 ARG USER_ID
