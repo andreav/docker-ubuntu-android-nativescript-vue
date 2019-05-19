@@ -45,6 +45,7 @@ docker run --name nsvue \
            -v /dev/bus/usb:/dev/bus/usb \
            -v ${PWD}:/usr/src/app \
            -v /usr/src/app/node_modules \
+           -p 40000:40000
            img-and-ubu-ns-vue
 
 docker exec -it nsvue npm install
