@@ -56,7 +56,7 @@ tns run android --bundle
 With these command you are:
 
 - Getting Dockerfile and .dockerignore files into your project
-  You need to build dockerfile locally for creating the right use inside the container
+You need to build dockerfile locally for creating the right user inside the container
 
 - Downloading andreav/ubuntu-android-nativescript image
   - ubuntu 18.04 is the base
