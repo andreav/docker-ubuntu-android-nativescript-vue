@@ -122,7 +122,7 @@ tns run android --bundle
 If you now change source files from host machine, your app will reflect changes on the phone.
 
 
-## Installing new node packages
+# Installing new node packages
 
 Every time you need to install a new node package you should:
 
