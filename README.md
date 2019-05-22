@@ -81,7 +81,7 @@ Build and run your app on the emulator!
 
 If you now change source files from host machine, your app will reflect changes on the emulator.
 
-# Mode 2 - Run the app on real device
+## Mode 2 - Run the app on real device
 
 You will need a real android device connected to the host.
 
