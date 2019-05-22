@@ -88,7 +88,7 @@ You will need a real android device connected to the host.
 Run these commands:
 
 ```
-UIDV=$(id -u) GIDV=$(id -g) docker-compose up nsvue
+UIDV=$(id -u) GIDV=$(id -g) docker-compose up --no-deps nsvue
 ```
 1. Downloading andreav/ubuntu-android-nativescript image containing:
   - ubuntu 18.04 is the base
