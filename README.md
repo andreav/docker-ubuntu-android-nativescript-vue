@@ -24,66 +24,103 @@ npm install
 
 Now you host is ready, you have a nativescript-vue project and you can start developing
 
-## Run the app inside the container
-
-Building and running your app was the hard setup part.
-But now you can simply issue this commands (from the root of the project):
+Then "pull" docker files inside your project:
 
 ```
 curl -LJ \
      -O https://raw.githubusercontent.com/andreav/docker-ubuntu-android-nativescript-vue/master/Dockerfile \
      -O https://raw.githubusercontent.com/andreav/docker-ubuntu-android-nativescript-vue/master/.dockerignore
-
-docker build -t img-and-ubu-ns-vue \
-             --build-arg USER_ID=$(id -u) \
-             --build-arg GROUP_ID=$(id -g) \
-             .
-
-docker run --name nsvue \
-           -it -d --privileged \
-           -u $( id -u):$(id -g) \
-           -v /dev/bus/usb:/dev/bus/usb \
-           -v ${PWD}:/usr/src/app \
-           -v /usr/src/app/node_modules \
-           -p 40000:40000
-           img-and-ubu-ns-vue
-
-docker exec -it nsvue npm install
-
-alias tns='docker exec -it nsvue tns'
-tns build android --bundle
-tns run android --bundle
+     -O https://raw.githubusercontent.com/andreav/docker-ubuntu-android-nativescript-vue/master/docker-compose.yml
 ```
 
-With these command you are:
+Now you can choose if:
 
-- Getting Dockerfile and .dockerignore files into your project
-You need to build dockerfile locally for creating the right user inside the container
+- Run your app on android emulator of your choice: Mode 1
+- Run your app on real device connected to the host: Mode 2
 
-- Downloading andreav/ubuntu-android-nativescript image
+## Mode 1 - Run the app on androir emulator
+
+This is the fastest way.
+
+Run these commands:
+
+```
+UIDV=$(id -u) GIDV=$(id -g) docker-compose up
+```
+1. Downloading andreav/ubuntu-android-nativescript image containing:
   - ubuntu 18.04 is the base
   - java 8 openjdj
   - android-28 SDK
   - nativescript 5.4.0
+2. Creating the same host user into the container 
+3. Spawning budtmo/docker-android-x86-9.0 emulator
+   - Note: you can edit docker-compose.yml to choose another emulator just modifying 'image' entry under 'docker-emu' service
+   - All budtmo/docker-android emulator are valid choices
 
-- Building ubuntu-android-nativescript-vue on top of the previous one
-  - a user with the same uid:gid from the host is created in the container
 
-- Run a container named 'nsvue' as the build environment:
-  - running with same uid:gid as host user. So, generated files inside the container (i.e. "target" folder containing apk) will appear on the host as created by the host user
-  - mounting source code
-  - using --privileged and mount /dev/bus/usb for installing apk on the device
-  - mounting node_modules as container volume to avoid overwriting host node_modules
+```
+docker exec -it nsvue npm install
+```
+Install npm modules into the toolchain container named 'nsvue'
 
-- npm install packages
+```
+alias tns='docker exec -it nsvue tns'
+alias adb='docker exec -it nsvue adb'
 
-- Creating an alias for using tns as if it was installed on the host machine
+adb connect android-emu:5555
+adb devices -l
+```
+- Setup a couple of handy aliases for using container like your host
+- Connecting adb on nsvue container to adb on emulator container
 
-- Building project for android
+```
+tns build android --bundle
+tns run android --bundle
+```
+Build and run your app on the emulator!
 
-- Running the app on a device connected to the host
+If you now change source files from host machine, your app will reflect changes on the emulator.
+
+# Mode 2 - Run the app on real device
+
+You will need a real android device connected to the host.
+
+Run these commands:
+
+```
+UIDV=$(id -u) GIDV=$(id -g) docker-compose up nsvue
+```
+1. Downloading andreav/ubuntu-android-nativescript image containing:
+  - ubuntu 18.04 is the base
+  - java 8 openjdj
+  - android-28 SDK
+  - nativescript 5.4.0
+2. Creating the same host user into the container 
+
+Note: until this [docker-compose issue](https://github.com/docker/compose/issues/2061) will not be fixed, you must take note of the container name generated.
+On standalone runs, docker-compose prefixes container name with the name of your project directory, something like this:
+
+`[projectdir]_nsvue`
+
+
+```
+docker exec -it [projectdir]_nsvue npm install
+```
+
+Install npm modules into the toolchain container
+
+
+```
+alias tns='docker exec -it [projectdir]_nsvue tns'
+tns build android --bundle
+tns run android --bundle
+```
+- Setup a couple of handy aliases for using container like your host
+- Build project for android
+- Run the app on a real device connected to the host
 
 If you now change source files from host machine, your app will reflect changes on the phone.
+
 
 ## Installing new node packages
 
@@ -93,7 +130,9 @@ Every time you need to install a new node package you should:
 
 - Install it also in teh container, issuing:
 
-`docker exec -it nsvue npm install`
+`docker exec -it nsvue npm install` (Mode 1)
+or
+`docker exec -it [projectdir]_nsvue npm install` (Mode 2)
 
 # Security
 

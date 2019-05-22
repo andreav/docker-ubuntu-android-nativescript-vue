@@ -1,0 +1,35 @@
+version: '3'
+# run with: UIDV=$(id -u) GIDV=$(id -g) docker-compose up
+
+services:
+  android-emu:
+      container_name: andoird-emu
+      image: budtmo/docker-android-x86-8.0
+      privileged: true
+      ports:
+          - 6080:6080
+          - 5554:5554
+          - 5555:5555
+      environment:
+          - DEVICE=Samsung Galaxy S6
+  nsvue:
+      container_name: nsvue
+      build: 
+          context: .
+          dockerfile: Dockerfile
+          args:
+              USER_ID: ${UIDV}
+              GROUP_ID: ${GIDV}
+      command: bash
+      user: ${UIDV}:${GIDV}
+      privileged: true
+      volumes:
+          - /dev/bus/usb:/dev/bus/
+          - ${PWD}:/usr/src/app
+          - /usr/src/app/node_modules
+      ports:
+          - 40000:40000
+      stdin_open: true
+      tty: true
+      depends_on:
+          - android-emu
