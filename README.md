@@ -97,21 +97,16 @@ UIDV=$(id -u) GIDV=$(id -g) docker-compose up --no-deps nsvue
   - nativescript 5.4.0
 2. Creating the same host user into the container 
 
-Note: until this [docker-compose issue](https://github.com/docker/compose/issues/2061) will not be fixed, you must take note of the container name generated.
-On standalone runs, docker-compose prefixes container name with the name of your project directory, something like this:
-
-`[projectdir]_nsvue`
-
 
 ```
-docker exec -it [projectdir]_nsvue npm install
+docker exec -it nsvue npm install
 ```
 
 Install npm modules into the toolchain container
 
 
 ```
-alias tns='docker exec -it [projectdir]_nsvue tns'
+alias tns='docker exec -it nsvue tns'
 tns build android --bundle
 tns run android --bundle
 ```
@@ -130,9 +125,7 @@ Every time you need to install a new node package you should:
 
 - Install it also in teh container, issuing:
 
-`docker exec -it nsvue npm install` (Mode 1)
-or
-`docker exec -it [projectdir]_nsvue npm install` (Mode 2)
+`docker exec -it nsvue npm install`
 
 # Security
 
