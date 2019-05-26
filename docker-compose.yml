@@ -4,7 +4,14 @@ version: '3'
 services:
   android-emu:
       container_name: andoird-emu
-      image: budtmo/docker-android-x86-8.0
+      #image: budtmo/docker-android-x86-5.0.1
+      #image: budtmo/docker-android-x86-5.1.1
+      #image: budtmo/docker-android-x86-6.0
+      #image: budtmo/docker-android-x86-7.0
+      #image: budtmo/docker-android-x86-7.1.1
+      #image: budtmo/docker-android-x86-8.0
+      #image: budtmo/docker-android-x86-8.1
+      image: budtmo/docker-android-x86-9.0
       privileged: true
       ports:
           - 6080:6080
