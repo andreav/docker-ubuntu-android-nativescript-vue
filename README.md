@@ -79,6 +79,14 @@ tns run android --bundle
 ```
 Build and run your app on the emulator!
 
+Now point your browser to:
+
+```
+http://localhost:6080/
+```
+Thanks to budtmo/docker-android and noVNC you can see emulator directly from your browser. 
+
+
 If you now change source files from host machine, your app will reflect changes on the emulator.
 
 ## Mode 2 - Run the app on real device
@@ -113,6 +121,7 @@ tns run android --bundle
 - Setup a couple of handy aliases for using container like your host
 - Build project for android
 - Run the app on a real device connected to the host
+
 
 If you now change source files from host machine, your app will reflect changes on the phone.
 
